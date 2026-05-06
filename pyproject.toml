@@ -1,0 +1,28 @@
+[project]
+name = "gradual"
+version = "0.1.0"
+description = "GraDual: Tool Dependency Graph-Based Defense Against Indirect Prompt Injection (slimmed deliverable)"
+requires-python = ">= 3.10"
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = [
+    "openai>=1.0.0",
+    "httpx>=0.27.0",
+    "pydantic[email]>=2.7.1",
+    "docstring-parser>=0.15",
+    "tenacity>=8.2.3",
+    "typing-extensions>=4.11.0",
+    "pyyaml>=6.0.1",
+    "deepdiff>=7.0.1",
+    "rich>=13.7.1",
+    "openapi-pydantic>=0.5.0",
+    "jsonref>=1.1.0",
+    "python-dotenv>=1.0.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentdojo"]
