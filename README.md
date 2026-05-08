@@ -70,23 +70,14 @@ python examples/run_single_case.py \
     --model qwen3-coder
 ```
 
-Output:
-```
-Defense                          Utility   Safe  HITL    In tok   Out tok  Wall-s
-----------------------------------------------------------------------------------
-None                                True  False     0    25,970       463    14.1
-spotlighting_with_delimiting        True  False     0    25,722       448    14.1
-grade_dual                          True   True     0   132,189     4,429    95.7
-```
-
 ## Reproduce the parallel benchmark
 
 ```bash
-# 10% sample of all 4 suites, 4 defenses compared, 8 worker threads
+# 80% sample of all 4 suites, 4 defenses compared, 8 worker threads
 python run/quick_eval.py \
     --defenses None spotlighting_with_delimiting grade_dual \
     --model qwen3-coder \
-    --sample_pct 0.1 \
+    --sample_pct 0.8 \
     --workers 8
 ```
 
@@ -97,23 +88,15 @@ Outputs land in `evaluation_results/quick_eval_parallel_…/`:
 
 ## Evaluated overhead
 
-See `docs/overhead_comparison.md` for the headline numbers (qwen3-coder, 10% sample of AgentDojo v1.1.2, 4 suites). Summary:
-
-| Defense | ×baseline tokens | avg/case latency | TCR@∞ | Safety |
-|---|---:|---:|---:|---:|
-| None | 1.00× | 14.1 s | 55% | 56% |
-| spotlight | 0.99× | 14.1 s | 58% | 69% |
-| **grade_dual** | **5.17×** | **95.7 s** | **68%** | **100%** |
-
-GraDual trades a 5× cost for 100% safety on IPI attack.
+See `docs/overhead_comparison.md` for the headline numbers. 
 
 ## FlowBench
 
 `FlowBench/` is a separate, self-contained benchmark for control-information
 flow attacks (G1/G2/G3 categories). 7 scenarios × 15 variants = 105 tasks
 across banking / email / homework / slack / web. Headline result on this
-benchmark (GPT-4o backbone): GraDual attacked SAFE = **115/120 (95.8%)**;
-qwen3-coder cross-backbone: **118/120 (98.3%)**.
+benchmark (GPT-4o backbone): GraDual attacked SAFE = **115/120 (95.8%)** w.o HITL, **120/120 (100%)** with HITL;
+qwen3-coder cross-backbone: **118/120 (98.3%)** w.o HITL, **120/120 (100%)** with HITL.
 
 ```bash
 python -m FlowBench.run_pilot                       # 7-task sequential smoke
